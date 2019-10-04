@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:attr="action=${payBean.getUrl()}" method="post">
+    密文：<input type="text" name="encryptData" th:attr="value=${payBean.getEncryptData()}">
+    签名：<input type="text" name="rsaSign" th:attr="value=${payBean.getRsaSign()}">
+    回调：<input type="text" name="notify" th:attr="value=${payBean.getNotify()}">
+    <input type="submit" value="提交">
+</form>
+<script>document.forms[0].submit();</script>
+</body>
+</html>
