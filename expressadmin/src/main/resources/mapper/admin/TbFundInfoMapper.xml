@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.admin.mapper.TbFundInfoMapper">
+
+    <select id="accumulativeSum" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        select ifnull(sum(money),0) from tb_fund_info where user_id = #{userId}
+    </select>
+    <select id="recommendSum" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        select ifnull(sum(money),0) from tb_fund_info where user_id = #{userId} and money_purpose = 1
+    </select>
+    <select id="mySum" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        select ifnull(sum(money),0) from tb_fund_info where user_id = #{userId} and money_purpose = 0
+    </select>
+
+    <select id="getTbFundInfoList" resultType="com.xiaoshu.admin.entity.TbFundInfo">
+        SELECT
+        t.id AS id,
+        a.name AS userName,
+        case t.fund_type when 1 then '收入' when 0 then '支出' end as fundTypeNmae,
+        t.money AS money,
+        date_format(t.add_time,'%Y-%m-%d') AS addTime,
+        t.purpose_info AS purposeInfo,
+        case t.money_purpose when 1 then '推荐' when 0 then '我的' end as moneyPurposeName
+        FROM
+        tb_fund_info t
+        LEFT JOIN admin_user a ON t.user_id = a.id
+        <where>
+            AND a.soft_delete=1 AND  t.fund_type=1
+            <if test="account != null and account != ''">
+                AND a.account LIKE "%"#{account}"%"
+                <!--<if test="dbName == 'oracle'">'%'||#{account}||'%' ESCAPE '\'</if>
+                <if test="dbName == 'mssql'">'%'+#{account}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{account},'%')</if>-->
+            </if>
+            <!--<if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+                AND t.add_time BETWEEN #{startDate} AND #{endDate}
+            </if>-->
+            <if test="startDate != null  and startDate != '' and (endDate==null or endDate=='')">
+                AND t.add_time  &gt;=  #{startDate}
+            </if>
+            <if test="endDate != null and endDate != '' and (startDate == null  or startDate == '')">
+                AND t.add_time  &lt; #{endDate}
+            </if>
+            <if test="moneyPurpose != null">
+                AND t.money_purpose = #{moneyPurpose}
+            </if>
+        </where>
+    </select>
+
+</mapper>

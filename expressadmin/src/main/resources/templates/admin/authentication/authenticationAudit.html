@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>代理申请列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+    <style>
+        .showImg{
+            width: 200px !important;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<form class="layui-form" style="width:80%;margin-top: 15px;">
+    <input class="layui-hide" name="id" th:value="${userInfo.id}"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input"th:value="${userInfo.userName}" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">身份证号</label>
+        <div class="layui-input-block">
+            <input type="number" class="layui-input" th:value="${userInfo.userCard}" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">认证照片</label>
+        <div class="layui-input-block">
+            <img class="showImg" th:src="@{/static/imagefiles/17da4e73-0c39-4b56-b7a0-0027f3d1fe6a.jpg}">
+            <img class="showImg" th:src="@{/static/imagefiles/96bfe177-bf0c-4e1e-a025-d47455b170f4.jpg}">
+            <img class="showImg" th:src="@{/static/imagefiles/fc0fea2e-98d9-4be0-b41f-6baf3a9664ef.png}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否通过</label>
+        <div class="layui-input-block">
+            <input type="radio" name="s_isCertification" value="0" title="是" checked>
+            <input type="radio" name="s_isCertification" value="3" title="否">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核理由</label>
+        <div class="layui-input-block">
+            <textarea type="text" name="s_auditReason" class="layui-textarea" lay-verify="required"placeholder="请填写审核理由"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="authenticationAuditSub">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/authentication/authenticationAudit.js}"></script>
+</body>
+</html>

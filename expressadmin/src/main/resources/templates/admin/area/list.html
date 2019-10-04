@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>菜单管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" th:href="@{/static/admin/css/list.css}" media="all" />
+</head>
+<body class="childrenBody">
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<div class="layui-fluid">
+<!--<div class="layui-row">-->
+<!--    <div class="layui-col-xs12">-->
+        <div clas="layui-row">
+             <div class="layui-col-md6">
+                    <legend style="font-size:18px">区域检索</legend>
+                    <div class="layui-field-box">
+                        <form class="layui-form">
+                            <div class="layui-inline" style="width: 40%">
+                                <input type="text" value="" name="areaName" placeholder="请输入区域名称" class="layui-input search_input">
+                            </div>
+                            <div class="layui-inline">
+                                <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+                            </div>
+                                <shiro:hasPermission name="sys:area:add">
+                                    <div class="layui-inline">
+                                        <a class="layui-btn layui-btn-normal" data-type="addArea"><i class="layui-icon">&#xe654;</i>添加区域</a>
+                                    </div>
+                                </shiro:hasPermission>
+                        </form>
+                    </div>
+             </div>
+        </div>
+
+
+        <div class="layui-form">
+            <table id="authTable" class="layui-table" lay-filter="authList"></table>
+            <script type="text/html" id="authBar">
+                <shiro:hasPermission name="sys:area:edit">
+                    <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="editChildArea"><i class="layui-icon">&#xe642;</i> 编辑 </a>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="sys:area:delete">
+                    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delArea"><i class="layui-icon">&#xe640;</i> 删除</a>
+                </shiro:hasPermission>
+            </script>
+        </div>
+    </div>
+</div>
+<div id="page"></div>
+
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/area/areaList.js}"></script>
+<script> </script>
+</body>
+</html>

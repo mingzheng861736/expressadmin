@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <meta charset="utf-8">
+    <title>vip用户列表--后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel = "shortcut icon" href="${site.logo}">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+    <link rel="stylesheet" th:href="@{/static/admin/css/list.css}" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>vip检索</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-inline" style="width: 15%">
+                <input type="text" value="" name="s_key" placeholder="可以输入登录名/邮箱/手机号" class="layui-input search_input">
+            </div>
+            <div class="layui-input-inline layui-form">
+                <select name="s_user_type" class="" id="userType">
+                    <option value="">请选择用户类型</option>
+                    <option value="0">普通vip</option>
+                    <option value="1">代理</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+            </div>
+<!--            <shiro:hasPermission name="sys:user:add">-->
+<!--            <div class="layui-inline">-->
+<!--                <a class="layui-btn layui-btn-normal" data-type="addUser">添加用户</a>-->
+<!--            </div>-->
+<!--            </shiro:hasPermission>-->
+<!--            <shiro:hasPermission name="sys:user:delete">-->
+<!--            <div class="layui-inline">-->
+<!--                <a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>-->
+<!--            </div>-->
+<!--            </shiro:hasPermission>-->
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form users_list">
+    <table class="layui-table" id="vipUserTable" lay-filter="vipUserList"></table>
+    <script type="text/html" id="vipUserUserStatus">
+        {{#  if(d.status == true){ }}
+        <span class="layui-badge layui-bg-green">正常</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-gray">锁定</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="vipClass">
+<!--        {{#  if(d.userVip == '1'){ }}-->
+<!--        <span class="layui-badge layui-bg-green">普通会员</span>-->
+<!--        {{#  } else if(d.userVip == '2'){ }}-->
+<!--        <span class="layui-badge layui-bg-green">白金会员</span>-->
+<!--        {{#  } else if(d.userVip == '3'){ }}-->
+<!--        <span class="layui-badge layui-bg-green">铂金会员</span>-->
+<!--        {{#  } }}-->
+        {{#  layui.each(d.tbVips, function(index, item){ }}
+            {{#  if(item.id == d.userVip){ }}
+            <span class="layui-badge layui-bg-green">{{item.vipRank}}</span>
+            {{#  } }}
+        {{#  }); }}
+    </script>
+
+    <script type="text/html" id="areaClass">
+        <!--        {{#  if(d.userVip == '1'){ }}-->
+        <!--        <span class="layui-badge layui-bg-green">普通会员</span>-->
+        <!--        {{#  } else if(d.userVip == '2'){ }}-->
+        <!--        <span class="layui-badge layui-bg-green">白金会员</span>-->
+        <!--        {{#  } else if(d.userVip == '3'){ }}-->
+        <!--        <span class="layui-badge layui-bg-green">铂金会员</span>-->
+        <!--        {{#  } }}-->
+        {{#  layui.each(d.tbAreas, function(index, item){ }}
+        {{#  if(item.id == d.userArea){ }}
+        <span class="layui-badge layui-bg-green">{{item.areaName}}</span>
+        {{#  } }}
+        {{#  }); }}
+    </script>
+
+    <script type="text/html" id="vipUserType">
+        {{#  if(d.userType == 0){ }}
+        <span class="layui-badge layui-bg-gray">普通会员</span>
+        {{#  } else if(d.userType == 1){ }}
+        <span class="layui-badge layui-bg-green">代理</span>
+        {{#  } else{ }}
+        <span class="layui-badge layui-bg-green">未知</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="vipUserBar">
+        <shiro:hasPermission name="sys:vipUser:lock">
+        {{#  if(d.status == false){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">启用</a>
+        {{#  } else if(d.status == true){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">锁定</a>
+        {{#  } }}
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:user:edit">
+            <a class="layui-btn layui-btn-xs" lay-event="vipDetails">会员详情</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:vipUser:delete">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </shiro:hasPermission>
+    </script>
+</div>
+<div id="page"></div>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/VipUser/VipUserList.js}"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>会员收益统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>会员收益检索</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-inline" style="width: 15%">
+                <input type="text" value="" name="account" placeholder="可以输入登录名" class="layui-input search_input">
+            </div>
+            <div class="layui-input-inline layui-form">
+                <select name="vipRank" class="" id="userType" lay-search>
+                    <option value="">请选择vip等级</option>
+                    <option th:each="vipUser : ${vipUserList}"> <p th:text="${vipUser.vipRank}">普通用户</p></option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" >开始时间：</label>
+                <div class="layui-input-inline">
+                    <input name="startDate"  type="text" class="layui-input" id="startTime" placeholder="请选择">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" >结束时间：</label>
+                <div class="layui-input-inline">
+                    <input name="endDate"  type="text" class="layui-input" id="endTime"  placeholder="请选择">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form">
+    <table class="layui-table" id="vipEarningsStatisticsTable" lay-filter="vipEarningsStatisticsList"></table>
+    <script type="text/html" id="earningsStatisticsBar">
+        <a class="layui-btn layui-btn-xs" lay-event="detail">明细</a>
+    </script>
+    <script type="text/html" id="vipUserType">
+        {{#  if(d.userType == '0'){ }}
+        <span class="layui-badge layui-bg-gray">普通会员</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-green">代理</span>
+        {{#  } }}
+    </script>
+    <!--<script type="text/html" id="vipUserUserStatus">
+        {{#  if(d.status == true){ }}
+        <span class="layui-badge layui-bg-green">正常</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-gray">锁定</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="vipClass">
+        {{#  if(d.userVip == '1'){ }}
+        <span class="layui-badge layui-bg-green">普通会员</span>
+        {{#  } else if(d.userVip == '2'){ }}
+        <span class="layui-badge layui-bg-green">白金会员</span>
+        {{#  } else if(d.userVip == '3'){ }}
+        <span class="layui-badge layui-bg-green">铂金会员</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="vipUserType">
+        {{#  if(d.userType == '0'){ }}
+        <span class="layui-badge layui-bg-gray">普通会员</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-green">代理</span>
+        {{#  } }}
+    </script>-->
+
+    <!--<script type="text/html" id="vipUserBar">
+        <shiro:hasPermission name="sys:vipUser:lock">
+            {{#  if(d.status == false){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">启用</a>
+            {{#  } else { }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">锁定</a>
+            {{#  } }}
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:user:edit">
+            <a class="layui-btn layui-btn-xs" lay-event="vipDetails">查看vip详情信息</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:user:delete">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </shiro:hasPermission>
+    </script>-->
+</div>
+<div id="page"></div>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/earningsStatistics/vipEarningsStatistics.js}"></script>
+</body>
+</html>

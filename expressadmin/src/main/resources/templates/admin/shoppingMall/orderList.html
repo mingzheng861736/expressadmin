@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>会员收益统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>会员收益检索</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <!--<div class="layui-input-inline layui-form">
+                <select name="orderStatus" class="" id="userType" lay-search>
+                    <option value=""selected="selected">请选择分期</option>
+                    <option value="6">6个月</option>
+                    <option value="12">12个月</option>
+                    <option value="24">24个月</option>
+                </select>
+            </div>-->
+            <div class="layui-input-inline layui-form">
+                <select name="orderStatus" class="" id="userType" lay-search>
+                    <option value=""selected="selected">请选择订单状态</option>
+                    <option value="0">未支付</option>
+                    <option value="1">已支付</option>
+                    <option value="2">兑换中</option>
+                    <option value="3">已完成</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" >开始时间：</label>
+                <div class="layui-input-inline">
+                    <input name="startDate"  type="text" class="layui-input" id="startTime" placeholder="请选择">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" >结束时间：</label>
+                <div class="layui-input-inline">
+                    <input name="endDate"  type="text" class="layui-input" id="endTime"  placeholder="请选择">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form">
+    <table class="layui-table" id="integralShoppingMallTable" lay-filter="integralShoppingMallList"></table>
+    <script type="text/html" id="isPayOffBar">
+        {{#  if(d.isPayOff == '0'){ }}
+        <span class="layui-badge layui-bg-green">付清</span>
+        {{#  } else if(d.isPayOff == '1') { }}
+        <span class="layui-badge layui-bg-red">未付清</span>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="orderStatusBar">
+        {{#  if(d.orderStatus == '0'){ }}
+        <span class="layui-badge layui-bg-red">待支付</span>
+        {{#  } else if(d.orderStatus == '1') { }}
+        <span class="layui-badge layui-bg-green">已支付</span>
+        {{#  } else if(d.orderStatus == '2') { }}
+        <span class="layui-badge layui-bg-blue">兑换中</span>
+        {{#  } else if(d.orderStatus == '3') { }}
+        <span class="layui-badge layui-bg-gray">已完成</span>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="orderBar">
+        <a class="layui-btn layui-btn-xs" lay-event="status">状态变更</a>
+        <a class="layui-btn layui-btn-xs" lay-event="orderDetails">订单详情</a>
+    </script>
+
+</div>
+<div id="page"></div>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/shoppingMall/orderList.js}"></script>
+</body>
+</html>

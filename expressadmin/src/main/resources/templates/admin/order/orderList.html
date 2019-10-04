@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <meta charset="utf-8">
+    <title>订单列表--后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel = "shortcut icon" href="${site.logo}">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+    <link rel="stylesheet" th:href="@{/static/admin/css/list.css}" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>订单检索</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >用户名：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="" name="account" placeholder="输入用户名" class="layui-input search_input"></div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >取件人：</label>
+                    <div class="layui-input-inline">
+                        <select name="pickUpPerson" class="form-control" lay-search>
+                            <option value="">请选择</option>
+                            <option th:each="user,userStat:${adminUsers}" th:value="${user.id}" th:text="${user.account}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >开始时间：</label>
+                    <div class="layui-input-inline">
+                        <input name="startTime"  type="text" class="layui-input" id="startTime" placeholder="请选择">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >结束时间：</label>
+                    <div class="layui-input-inline">
+                        <input name="endTime"  type="text" class="layui-input" id="endTime"  placeholder="请选择">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" >单号：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="" name="trackingNumber" placeholder="输入快递单号/系统单号" class="layui-input search_input">                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >支付方式：</label>
+                    <div class="layui-input-inline">
+                        <select name="payType" class="form-control" lay-search>
+                            <option value="">输入或选择</option>
+                            <option th:each="payType,userStat:${payTypes}" th:value="${payType.id}" th:text="${payType.payType}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >订单状态：</label>
+                    <div class="layui-input-inline">
+                        <select name="orderStatu" lay-search class="" id="sex">
+                            <option value="">输入或选择</option>
+                            <option value="0">待支付</option>
+                            <option value="1">待出单</option>
+                            <option value="2">已出单</option>
+                            <option value="3">待取件</option>
+                            <option value="4">已取件</option>
+                            <option value="5">待发货</option>
+                            <option value="6">已发货</option>
+                            <option value="7">已签收</option>
+                            <option value="8">已完成</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >订单区域：</label>
+                    <div class="layui-input-inline">
+                        <select name="orderArea" class="form-control" lay-search>
+                            <option value="">输入或选择</option>
+                            <option th:each="area,userStat:${areas}" th:value="${area.id}" th:text="${area.areaName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+                </div>
+            </div>
+            <!--<div class="layui-input-inline">-->
+                <!--<select name="s_type">-->
+                    <!--<option value="">用户类型</option>-->
+                    <!--<option value="admin">后台用户</option>-->
+                    <!--<option value="page">前台用户</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <shiro:hasPermission name="sys:user:add">
+            <div class="layui-inline">
+                <a class="layui-btn layui-btn-normal" data-type="addUser">添加用户</a>
+            </div>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="sys:user:delete">
+            <div class="layui-inline">
+                <a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>
+            </div>
+            </shiro:hasPermission>
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form users_list">
+    <table class="layui-table" id="orderTable" lay-filter="orderList"></table>
+
+    <script type="text/html" id="orderStatus">
+        {{#  if(d.order_state == '0'){ }}
+        <span style="color: #d2d2d2">待支付</span>
+        {{#  } else if(d.order_state == '1'){ }}
+        <span class="layui-badge layui-bg-red">待出单</span>
+        {{#  } else if(d.order_state == '2'){ }}
+        <span class="layui-badge layui-bg-green">已出单</span>
+        {{#  } else if(d.order_state == '3'){ }}
+        <span style="color: #F581B1;">待取件</span>
+        {{#  } else if(d.order_state == '4'){ }}
+        <span class="layui-badge layui-bg-green">已取件</span>
+        {{#  } else if(d.order_state == '5'){ }}
+        <span class="layui-badge layui-bg-green">待发货</span>
+        {{#  } else if(d.order_state == '6'){ }}
+        <span class="layui-badge layui-bg-green">已发货</span>
+        {{#  } else if(d.order_state == '7'){ }}
+        <span class="layui-badge layui-bg-green">已签收</span>
+        {{#  } else if(d.order_state == '8'){ }}
+        <span class="layui-badge layui-bg-green">已完成</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="userType">
+        {{#  if(d.adminUser){ }}
+        <span class="layui-badge layui-bg-gray">后台用户</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-green">前台用户</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="orderBar">
+<!--    <shiro:hasPermission name="sys:user:lock">-->
+<!--        {{#  if(d.locked == false){ }}-->
+<!--            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">锁定</a>-->
+<!--        {{#  } else { }}-->
+<!--            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">启用</a>-->
+<!--        {{#  } }}-->
+<!--    </shiro:hasPermission>-->
+        <shiro:hasPermission name="sys:order:list">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">订单明细</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="sys:order:edit">
+            <a class="layui-btn layui-btn-xs" lay-event="inputTrack">输入快递单号</a>
+        </shiro:hasPermission>
+<!--        <shiro:hasPermission name="sys:user:delete">-->
+<!--        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+<!--        </shiro:hasPermission>-->
+    </script>
+</div>
+<div id="page"></div>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/order/orderList.js}"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>vip快递报价修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+</head>
+<body class="childrenBody">
+<form class="layui-form" style="width:80%;margin: 15px;">
+    <input class="layui-hide" name="id" th:value="${tbUserSingle.id}"/>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">vip用户</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input layui-bg-gray"th:value="${tbUserSingle.adminUser.name}" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">快递报价</label>
+        <div class="layui-input-block">
+            <input type="text" name="singleAmount" class="layui-input"th:value="${tbUserSingle.singleAmount}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="singleChangeSub">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/vipUser/singlePriceChange.js}"></script>
+</body>
+</html>

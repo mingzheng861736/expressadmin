@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>输入快递单号</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+    <style type="text/css">
+        .layui-form-item .layui-inline{ width:33.333%; float:left; margin-right:0; }
+        @media(max-width:1240px){
+            .layui-form-item .layui-inline{ width:100%; float:none; }
+        }
+        .layui-form-item .role-box {
+            position: relative;
+        }
+        .layui-form-item .role-box .jq-role-inline {
+            height: 100%;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<form class="layui-form" style="width:80%;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>输入快递单号</legend>
+    </fieldset>
+    <input class="layui-hide" name="id" th:value="${tbOddNum.id}"/>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <label class="layui-form-label">快递公司</label>
+            <div class="layui-input-block">
+                <select class="form-control" name="trackingCompany" lay-search>
+                    <option th:each="tracking:${trackings}" th:value="${tracking.id}" th:text="${tracking.trackingCompanyName}"></option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">快递单号</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="trackingNumber"
+                       lay-verify="required" placeholder="请输入快递单号" value="">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">取件人</label>
+            <div class="layui-input-block">
+                <select class="form-control" name="pickUpPerson" lay-search>
+                    <option value="">输入或选择</option>
+                    <option th:each="pickUpPerson:${pickUpPersons}" th:value="${pickUpPerson.id}" th:text="${pickUpPerson.account}"></option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <span class="layui-badge" style="margin-top: 10px">如果不选择，系统随机挑选取件人</span>
+            </div>
+        </div>
+        <div class="layui-form-item" th:if="${isPay} eq false">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-disabled" style="color: red">订单未支付，不能出单</button>
+            </div>
+        </div>
+        <div class="layui-form-item" th:if="${isPay} eq true">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="submitTrack">立即提交</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/order/orderEdit.js}"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<meta charset="utf-8">
+<title>VIP等级列表--后台管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel = "shortcut icon" href="${site.logo}">
+<link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all" />
+<link rel="stylesheet" th:href="@{/static/admin/css/list.css}" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>添加VIP等级</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <!-- <div class="layui-inline" style="width: 15%">
+                 <input type="text" value="" name="s_userName" placeholder="输入用户名" class="layui-input search_input">
+             </div>
+             <div class="layui-inline" style="width: 15%">
+                 <input type="text" value="" name="s_userName" placeholder="输入取件人" class="layui-input search_input">
+             </div>
+             <div class="layui-inline" style="width: 15%">
+                 <input type="text" value="" name="s_userName" placeholder="输入系统单号" class="layui-input search_input">
+             </div>
+             <div class="layui-inline">
+                 <label class="layui-form-label" >开始时间：</label>
+                 <div class="layui-input-inline">
+                     <input name="s_startTime"  type="text" class="layui-input" id="startTime" placeholder="请选择">
+                 </div>
+             </div>
+             <div class="layui-inline">
+                 <label class="layui-form-label" >结束时间：</label>
+                 <div class="layui-input-inline">
+                     <input name="s_endTime"  type="text" class="layui-input" id="endTime"  placeholder="请选择">
+                 </div>
+             </div>
+             &lt;!&ndash;<div class="layui-input-inline">&ndash;&gt;
+                 &lt;!&ndash;<select name="s_type">&ndash;&gt;
+                     &lt;!&ndash;<option value="">用户类型</option>&ndash;&gt;
+                     &lt;!&ndash;<option value="admin">后台用户</option>&ndash;&gt;
+                     &lt;!&ndash;<option value="page">前台用户</option>&ndash;&gt;
+                 &lt;!&ndash;</select>&ndash;&gt;
+             &lt;!&ndash;</div>&ndash;&gt;
+             <div class="layui-inline">
+                 <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
+             </div>-->
+            <shiro:hasPermission name="sys:vip:add">
+                <div class="layui-inline">
+                    <a class="layui-btn layui-btn-normal" data-type="addUser">添加等级</a>
+                </div>
+            </shiro:hasPermission>
+            <!--  &lt;!&ndash;<shiro:hasPermission name="sys:user:delete">&ndash;&gt;
+              &lt;!&ndash;<div class="layui-inline">&ndash;&gt;
+                  &lt;!&ndash;<a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>&ndash;&gt;
+              &lt;!&ndash;</div>&ndash;&gt;
+              &lt;!&ndash;</shiro:hasPermission>&ndash;&gt;-->
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form users_list">
+    <shiro:hasPermission name="sys:vip:list">
+    <table class="layui-table" id="orderTable" lay-filter="vipList"></table>
+    </shiro:hasPermission>
+
+
+    <!--<script type="text/html" id="orderStatus">
+        {{#  if(d.orderState == '0'){ }}
+        <span class="layui-badge layui-bg-green">待支付</span>
+        {{#  } else { }}
+        未知
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="userType">
+        {{#  if(d.adminUser){ }}
+        <span class="layui-badge layui-bg-gray">后台用户</span>
+        {{#  } else { }}
+        <span class="layui-badge layui-bg-green">前台用户</span>
+        {{#  } }}
+    </script>
+
+    <script type="text/html" id="sexTpl">
+        {{#  if(d.oState === 1){ }}
+        <span style="color: #F581B1;">待付款</span>
+        {{#  } else if(d.oState === 2){ }}
+        <input type="checkbox" name="oId" value="{{d.oId}}" title="待发货" lay-filter="lockStatus" {{ d.status == 2 ? 'checked' : '' }}>
+        {{#  } else if(d.oState === 3){ }}
+        待收货
+        {{#  } else{ }}
+        已完成
+        {{#  } }}
+    </script>-->
+
+    <script type="text/html" id="orderBar">
+
+        <!--        {{#  if(d.locked == false){ }}-->
+        <!--            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">锁定</a>-->
+        <!--        {{#  } else { }}-->
+        <!--            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="lock">启用</a>-->
+        <!--        {{#  } }}-->
+        <!--    </shiro:hasPermission>-->
+        <shiro:hasPermission name="sys:vip:update">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">修改</a>
+        </shiro:hasPermission>
+
+        <shiro:hasPermission name="sys:vip:dele">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </shiro:hasPermission>
+        <!--        <shiro:hasPermission name="sys:user:delete">-->
+        <!--        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+        <!--        </shiro:hasPermission>-->
+    </script>
+</div>
+<div id="page"></div>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/static/admin/js/vipGrade/vipList.js}"></script>
+</body>
+</html>

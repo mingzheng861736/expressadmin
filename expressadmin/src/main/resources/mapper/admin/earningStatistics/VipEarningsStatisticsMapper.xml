@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.admin.mapper.eraningsStatistics.EraningsStatisticsMapper">
+
+    <sql id="eraningsStatisticsColumns">
+		au.account AS account,
+		au.name AS name,
+		au.user_type AS userType,
+		au.user_area AS userArea,
+		au.status AS status,
+		v.vip_rank AS vipRank,
+		t.money AS eranings
+	</sql>
+    <sql id="WasExpendPayJoins">
+    	LEFT JOIN tb_vip v ON au.user_vip = v.id
+        LEFT JOIN tb_fund_info t ON au.id = t.user_id
+    </sql>
+
+    <!--<select id="getEraningsStatistics" resultType="EraningsStatistics">
+          au.account account,au.name name,au.user_type userType,au.user_area userArea,au.status status,v.vip_rank vipRank,SUM(t.money)*v.vip_percentage as eranings
+        FROM admin_user au
+          <include refid="WasExpendPayJoins"/>
+        <where>
+            AND soft_delete=1
+            <if test="account != null and account != ''">
+                AND account LIKE
+                <if test="dbName == 'oracle'">'%'||#{account}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{account}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{account},'%')</if>
+            </if>
+            /*vip等级*/
+            <if test="vipRank != null and vipRank != ''">
+                AND vip_rank=#{vipRank}
+            </if>
+
+            <if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+                AND add_time BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="startDate != null  and startDate != '' and (endDate==null or endDate=='')">
+                AND add_time  &gt;=  #{startDate}
+            </if>
+            <if test="endDate != null and endDate != '' and (startDate == null  or startDate == '')">
+                AND add_time  &lt;= #{endDate}
+            </if>
+        </where>
+    </select>-->
+    <select id="getEraningsStatistics" resultType="EraningsStatistics">
+        SELECT
+			au.account AS account,
+				au.name AS name,
+				au.user_type AS userType,
+				au.user_area AS userArea,
+				au.status AS status,
+				v.vip_rank AS vipRank,
+		date_format(t.add_time,'%Y-%m-%d') AS date,
+			SUM(t.money) as eranings
+		FROM
+			admin_user au
+			LEFT JOIN tb_vip v ON au.user_vip = v.id
+			LEFT JOIN tb_fund_info t ON au.id = t.user_id
+		<where>
+		AND au.soft_delete=1 AND  t.fund_type=1
+		<if test="account != null and account != ''">
+			AND au.account LIKE
+			<if test="dbName == 'oracle'">'%'||#{account}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{account}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{account},'%')</if>
+		</if>
+
+		<if test="vipRank != null and vipRank != ''">
+			AND v.vip_rank=#{vipRank}
+		</if>
+
+		<if test="startDate != null and endDate != null and startDate != '' and endDate != ''">
+			AND t.add_time BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="startDate != null  and startDate != '' and (endDate==null or endDate=='')">
+			AND t.add_time  &gt;=  #{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' and (startDate == null  or startDate == '')">
+			AND t.add_time  &lt;= #{endDate}
+		</if>
+		</where>
+    </select>
+
+</mapper>
